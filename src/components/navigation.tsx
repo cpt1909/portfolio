@@ -1,14 +1,62 @@
-'use client';
-
-import { useState } from 'react';
-import { ArrowUpRight, Menu, X } from 'lucide-react';
-const links = [['Work', 'projects'], ['About', 'about'], ['Journey', 'experience'], ['Stack', 'stack']] as const;
+"use client";
+import { useState } from "react";
+import { Moon, Sun, Pause, Play, Menu, X } from "lucide-react";
+import { useTheme } from "./theme-provider";
 export function Navigation({ name }: { name: string }) {
+  const { theme, toggle, paused, toggleMotion } = useTheme();
   const [open, setOpen] = useState(false);
-  return <header className="site-header"><nav className="shell nav" aria-label="Main navigation">
-    <a href="#home" className="wordmark" aria-label={`${name}, home`}><span className="brand-mark">t<span>_</span></span><span>{name.toLowerCase()}<span className="accent">.</span></span></a>
-    <div className="desktop-links">{links.map(([label, id]) => <a key={id} href={`#${id}`}>{label}</a>)}</div>
-    <a className="nav-contact" href="#contact">Let’s talk <ArrowUpRight size={16} /></a>
-    <button className="menu-toggle" onClick={() => setOpen(!open)} aria-expanded={open} aria-controls="mobile-menu" aria-label={open ? 'Close navigation' : 'Open navigation'}>{open ? <X /> : <Menu />}</button>
-  </nav>{open && <div id="mobile-menu" className="mobile-links">{[...links, ['Contact', 'contact']].map(([label, id]) => <a key={id} href={`#${id}`} onClick={() => setOpen(false)}>{label}</a>)}</div>}</header>;
+  return (
+    <header className="site-header">
+      <nav className="nav shell" aria-label="Main navigation">
+        <a className="wordmark" href="#home" aria-label={name + ", home"}>
+          <span>✳</span>
+          {name.toLowerCase()}
+          <sup>®</sup>
+        </a>
+        <div className={"nav-links " + (open ? "is-open" : "")} id="nav-links">
+          {[
+            ["work", "WORK"],
+            ["about", "ABOUT"],
+            ["stack", "STACK"],
+            ["contact", "CONTACT"],
+          ].map(([id, label], i) => (
+            <a onClick={() => setOpen(false)} href={"#" + id} key={id}>
+              <small>0{i + 1}</small>
+              {label}
+            </a>
+          ))}
+        </div>
+        <div className="nav-tools">
+          <button
+            className="theme-switch"
+            onClick={toggle}
+            role="switch"
+            aria-checked={theme === "light"}
+            aria-label="Light theme"
+          >
+            <Moon size={12} />
+            <Sun size={12} />
+            <span className="switch-knob" />
+          </button>
+          <button
+            className="icon-button"
+            onClick={toggleMotion}
+            aria-label={paused ? "Resume animation" : "Pause animation"}
+            aria-pressed={paused}
+          >
+            {paused ? <Play size={14} /> : <Pause size={14} />}
+          </button>
+          <button
+            className="menu-toggle icon-button"
+            aria-label={open ? "Close menu" : "Open menu"}
+            aria-expanded={open}
+            aria-controls="nav-links"
+            onClick={() => setOpen(!open)}
+          >
+            {open ? <X size={20} /> : <Menu size={20} />}
+          </button>
+        </div>
+      </nav>
+    </header>
+  );
 }

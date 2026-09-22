@@ -12,6 +12,7 @@ export const projectSchema = z.object({
   ...base, title: z.string(), category: z.enum(['AI / ML', 'Full stack', 'Open source']),
   description: z.string(), stack: z.array(z.string()), github: optionalUrl, live: optionalUrl,
   visual: z.enum(['orbit', 'wave', 'grid', 'terminal']),
+  imageURL: optionalUrl.optional(),
 });
 export const entrySchema = z.object({ ...base, title: z.string(), organization: z.string(), period: z.string(), description: z.string() });
 export const technologySchema = z.object({ ...base, name: z.string(), category: z.string(), symbol: z.string() });

@@ -1,31 +1,71 @@
-import { ArrowUpRight, Github, Globe, Linkedin, Mail } from 'lucide-react';
-import type { Social } from '@/lib/schema';
-
+import { ArrowUpRight, Github, Globe, Linkedin, Mail } from "lucide-react";
+import type { Social } from "@/lib/schema";
+import { CopyEmail } from "./copy-email";
 const icons = { email: Mail, github: Github, linkedin: Linkedin, globe: Globe };
 
 export function Contact({ socials }: { socials: Social[] }) {
   return (
-    <section id="contact" className="contact-section shell">
-      <div className="contact-copy">
-        <p className="eyebrow">07 / WHAT’S NEXT?</p>
-        <h2>Good things<br />start with<br /><span className="accent">a conversation</span><span className="contact-asterisk">✳</span></h2>
-        <p>Have an ambitious idea, an interesting role, or an open-source rabbit hole? Let’s talk.</p>
+    <section id="contact" className="contact-section">
+      <div className="section-intro">
+        <span className="small-label">05 / YOUR MOVE</span>
+        <span>THE NEXT GOOD THING STARTS HERE.</span>
       </div>
-      <div className="social-directory" aria-label="Contact and social links">
-        <p className="eyebrow">FIND ME ON THE INTERNET</p>
-        {socials.map((social) => {
-          const Icon = Object.hasOwn(icons, social.icon) ? icons[social.icon as keyof typeof icons] : Globe;
-          const isEmail = social.url.startsWith('mailto:');
-          return (
-            <a className="social-card" key={social.id} href={social.url}
-              target={isEmail ? undefined : '_blank'} rel={isEmail ? undefined : 'noopener noreferrer'}>
-              <Icon size={24} className="accent" aria-hidden="true" />
-              <span><strong>{social.label}</strong>{social.value && <span className="social-value">{social.value}</span>}</span>
-              <ArrowUpRight size={22} aria-hidden="true" />
-            </a>
-          );
-        })}
-        {socials.length === 0 && <p className="muted">Contact links will be available soon.</p>}
+      <div className="contact-title">
+        <p className="contact-kicker">GOOD CONVERSATIONS MAKE GREAT THINGS.</p>
+        <h2>
+          Let’s make
+          <br />
+          <em>some waves.</em>
+        </h2>
+        <span className="contact-flower" aria-hidden="true">
+          ✳
+        </span>
+      </div>
+      <div className="contact-bottom">
+        <div className="contact-invitation">
+          <span className="contact-arrow" aria-hidden="true">
+            ↳
+          </span>
+          <p>
+            An ambitious idea. An interesting opportunity.
+            <br />A conversation that could lead anywhere.
+            <span className="contact-postscript">
+              YOU BRING THE WHAT IF. I’LL BRING THE WHY NOT.
+            </span>
+          </p>
+        </div>
+        <div className="social-directory" aria-label="Contact and social links">
+          {socials.map((social) => {
+            if (social.url.toLowerCase().startsWith("mailto:"))
+              return (
+                <CopyEmail
+                  key={social.id}
+                  url={social.url}
+                  label={social.label}
+                />
+              );
+            const Icon = Object.hasOwn(icons, social.icon)
+              ? icons[social.icon as keyof typeof icons]
+              : Globe;
+            return (
+              <a
+                key={social.id}
+                className="social-link"
+                href={social.url}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Icon size={19} />
+                <span>
+                  <strong>{social.label}</strong>
+                  {social.value && <small>{social.value}</small>}
+                </span>
+                <ArrowUpRight size={20} />
+              </a>
+            );
+          })}
+          {!socials.length && <p>Contact links will be available soon.</p>}
+        </div>
       </div>
     </section>
   );
